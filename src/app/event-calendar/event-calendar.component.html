@@ -1,0 +1,61 @@
+<div class="event-layout">
+  <div class="event-calendar">
+    <mat-card>
+      <mat-calendar [selected]="pickedDate" (selectedChange)="selectedDate($event)"></mat-calendar>
+    </mat-card>
+  </div>
+  <div class="event-new-event">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Add New Event</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="newEventForm" (ngSubmit)="onSubmit()">
+          <mat-form-field class="custom-form-input">
+            <mat-label>Event date</mat-label>
+            <input formControlName="eventDate" matInput [matDatepicker]="picker" />
+            <mat-hint style="font-size: x-small">MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <mat-form-field class="custom-form-input">
+            <mat-label>Event Title</mat-label>
+            <input formControlName="eventTitle" matInput>
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <mat-form-field class="custom-form-input">
+            <mat-label>Event Notes</mat-label>
+            <textarea formControlName="eventNotes" matInput></textarea>
+          </mat-form-field>
+          <mat-divider></mat-divider>
+          <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-evenly; align-items: center; align-content: center;">
+          <button mat-stroked-button color="basic" type="submit" [disabled]="!newEventForm.valid">Add</button>
+          <button (click)="resetEventForm()" type="reset" mat-stroked-button color="warn">Reset</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="event-current-event">
+    <hr style="border: 3px double navy" />
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Events dd. <small style="color: darkgray">{{pickedDate | date}}</small></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if(selectedEvents.length) {
+          <mat-list role="list">
+            @for( ev of selectedEvents; track $index) {
+              <mat-list-item role="listitem">
+                  <div style="margin:0;padding: 0; font-weight: bolder;" class="mat-subtitle-1">{{$index+1}}. {{ev.eventTitle}}</div>
+                  <p style="margin:0;padding: 0 0 0 8px;" class="mat-body-2">{{ev.eventNotes}}</p>
+              </mat-list-item>
+            }
+          </mat-list>
+        } @else {
+          <span class="mat-subtitle-1">No Events for this day.</span>        }
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
